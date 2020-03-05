@@ -1,0 +1,16 @@
+log_format simple '$remote_addr $request $status';
+server {
+	listen 80;
+
+	location ^~ /uploads/ {
+		root /home/box/web/;
+	}
+
+	location ~* ^.+\.\w+$ {
+		root /home/box/web/public;
+	}
+
+	location / {
+		return 404;
+	}
+}
