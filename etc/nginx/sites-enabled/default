@@ -1,16 +1,11 @@
 log_format simple '$remote_addr $request $status';
+
 server {
 	listen 80;
 
-	location ^~ /uploads/ {
-		root /home/box/web/;
-	}
-
-	location ~* ^.+\.\w+$ {
-		root /home/box/web/public;
-	}
-
-	location / {
-		return 404;
+	location /hello/ {
+		proxy_pass http://0.0.0.0:8080;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
 	}
 }
