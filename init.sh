@@ -10,9 +10,5 @@ sudo rm "${NGINX_CONFIG}"
 sudo ln -sf "${DIR}${NGINX_CONFIG}" "${NGINX_CONFIG}"
 sudo /etc/init.d/nginx restart
 
-GUNICORN_CONFIG="/etc/gunicorn.d/hello.py"
-sudo rm "${GUNICORN_CONFIG}"
-sudo rm "${DIR}/hello.py"
-sudo ln -sf "${DIR}${GUNICORN_CONFIG}" "${GUNICORN_CONFIG}"
-sudo ln -sf "${DIR}${GUNICORN_CONFIG}" "${DIR}/hello.py"
-gunicorn -c "${GUNICORN_CONFIG}" hello:app
+gunicorn -c "${DIR}/hello.py" hello:app --daemon --bind 0.0.0.0:8080
+${DIR}/ask/manage.py runserver 0.0.0.0:8000
