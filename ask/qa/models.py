@@ -8,6 +8,13 @@ class Question(models.Model):
     rating = models.IntegerField(default=0)
     author = models.ForeignKey(User)
     likes = models.ManyToManyField(User, related_name='likes_set')
+    def __unicode__(self):
+        return self.title
+    def get_absolute_url(self):
+        return '/post/%d/' % self.pk
+    class Meta:
+        db_table = 'blogposts'
+        ordering = ['-added_at']
 
 class Answer(models.Model):
     text = models.TextField()
