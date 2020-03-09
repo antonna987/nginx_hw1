@@ -1,9 +1,12 @@
 #!/bin/bash
+set -x
 
 #DIR="/home/box/web"
 DIR="/home/anton/data/src/python/web"
 
 cd ${DIR}
+
+./db_init.sh ${DIR}
 
 NGINX_CONFIG="/etc/nginx/sites-enabled/default"
 sudo rm "${NGINX_CONFIG}"
