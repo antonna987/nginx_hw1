@@ -1,8 +1,7 @@
 #!/bin/bash
 set -x
 
-DIR="/home/anton/data/src/python/web"
-#DIR=$1
+DIR=$1
 
 sudo /etc/init.d/mysql start
 sudo mysql -uroot -e "create database web_db;"
