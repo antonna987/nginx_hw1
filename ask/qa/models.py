@@ -28,3 +28,8 @@ class Answer(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(Question)
     author = models.ForeignKey(User)
+
+class TestCategory(models.Model):
+    caption = models.CharField(max_length=255)
+    added_at = models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField(default=0)
