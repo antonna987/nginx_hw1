@@ -16,7 +16,19 @@ def ask(request, *args, **kwargs):
     return HttpResponse('ask OK')
 
 def popular(request, *args, **kwargs):
-    return HttpResponse('popular OK')
+    try:
+        page = int(request.GET.get('page', 1))
+        limit = 10
+        posts = models.Question.objects.popular(page, limit)
+        paginator = Paginator(posts, limit)
+        paginator.baseurl = '/popular/?page='
+        page = paginator.page(page)
+    except:
+        raise Http404
+    return render(request, 'blog/posts_popular.html', {
+        'paginator': paginator,
+        'page': page,
+    })
 
 def new(request, *args, **kwargs):
     return HttpResponse('new OK')
