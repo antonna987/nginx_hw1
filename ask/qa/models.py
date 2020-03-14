@@ -28,7 +28,8 @@ class Answer(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(Question)
-    author = models.ForeignKey(User)
+    #author = models.ForeignKey(User)
+    author = models.ForeignKey(User, null=True) # Dummy
 
 class TestCategory(models.Model):
     caption = models.CharField(max_length=255)

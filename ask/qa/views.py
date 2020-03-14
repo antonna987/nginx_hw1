@@ -11,15 +11,26 @@ def signup(request, *args, **kwargs):
     return HttpResponse('signup OK')
 
 def question(request, *args, **kwargs):
-    idx = kwargs['idx']
+    idx = int(kwargs['idx'])
+
     try:
         q = models.Question.objects.get(pk=idx)
         answers = models.Answer.objects.filter(question=idx)
     except:
         raise Http404
+
+    if request.method == 'POST':
+        form = forms.AnswerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(q.get_absolute_url())
+    else:
+        form = forms.AnswerForm(initial={'question': idx})
+
     return render(request, 'blog/question.html', {
         'question': q,
         'answers': answers,
+        'form': form,
     })
 
 def ask(request, *args, **kwargs):
