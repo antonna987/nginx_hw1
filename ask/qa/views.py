@@ -10,7 +10,16 @@ def signup(request, *args, **kwargs):
     return HttpResponse('signup OK')
 
 def question(request, *args, **kwargs):
-    return HttpResponse('question OK')
+    idx = kwargs['idx']
+    try:
+        q = models.Question.objects.get(pk=idx)
+        answers = models.Answer.objects.filter(question=idx)
+    except:
+        raise Http404
+    return render(request, 'blog/question.html', {
+        'question': q,
+        'answers': answers,
+    })
 
 def ask(request, *args, **kwargs):
     return HttpResponse('ask OK')
