@@ -19,7 +19,7 @@ def popular(request, *args, **kwargs):
     try:
         page = int(request.GET.get('page', 1))
         limit = 10
-        posts = models.Question.objects.popular(page, limit)
+        posts = models.Question.objects.popular()
         paginator = Paginator(posts, limit)
         paginator.baseurl = '/popular/?page='
         page = paginator.page(page)
@@ -43,7 +43,7 @@ def root(request, *args, **kwargs):
     try:
         page = int(request.GET.get('page', 1))
         limit = 10
-        posts = models.Question.objects.new(page, limit)
+        posts = models.Question.objects.new()
         paginator = Paginator(posts, limit)
         paginator.baseurl = '/?page='
         page = paginator.page(page)
