@@ -1,7 +1,8 @@
 from django.core.paginator import Paginator
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
 import qa.models as models
+import qa.forms as forms
 
 def login(request, *args, **kwargs):
     return HttpResponse('login OK')
@@ -22,7 +23,16 @@ def question(request, *args, **kwargs):
     })
 
 def ask(request, *args, **kwargs):
-    return HttpResponse('ask OK')
+    if request.method == 'POST':
+        form = forms.AskForm(request.POST)
+        if form.is_valid():
+            question = form.save()
+            return HttpResponseRedirect(question.get_absolute_url())
+    else:
+        form = forms.AskForm()
+    return render(request, 'blog/post_add.html', {
+        'form': form
+    })
 
 def popular(request, *args, **kwargs):
     try:
