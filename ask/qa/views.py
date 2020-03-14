@@ -1,4 +1,6 @@
-from django.http import HttpResponse
+from django.core.paginator import Paginator
+from django.http import HttpResponse, Http404
+from django.shortcuts import render
 import qa.models as models
 
 def login(request, *args, **kwargs):
@@ -26,5 +28,16 @@ def add(request, *args, **kwargs):
     return HttpResponse('add OK ' + caption)
 
 def root(request, *args, **kwargs):
-    return HttpResponse('root OK')
-
+    try:
+        page = int(request.GET.get('page', 1))
+        limit = 10
+        posts = models.Question.objects.new(page, limit)
+        paginator = Paginator(posts, limit)
+        paginator.baseurl = '/?page='
+        page = paginator.page(page)
+    except:
+        raise Http404
+    return render(request, 'blog/posts_new.html', {
+        'paginator': paginator,
+        'page': page,
+    })
