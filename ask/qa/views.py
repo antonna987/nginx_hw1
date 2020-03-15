@@ -6,7 +6,16 @@ import qa.models as models
 import qa.forms as forms
 
 def login(request, *args, **kwargs):
-    return HttpResponse('login OK')
+    if request.method == 'POST':
+        form = forms.LogInForm(request.POST)
+        if form.is_valid():
+            auth.login(request, form.user)
+            return HttpResponseRedirect('/')
+    else:
+        form = forms.LogInForm()
+    return render(request, 'blog/login.html', {
+        'form': form
+    })
 
 def signup(request, *args, **kwargs):
     if request.method == 'POST':

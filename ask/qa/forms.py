@@ -1,6 +1,20 @@
+import django.contrib.auth as auth
 from django import forms
 import qa.models as models
 from django.contrib.auth.models import User
+
+class LogInForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField()
+    def clean(self):
+        username = self.cleaned_data['username']
+        password = self.cleaned_data['password']
+        self.user = auth.authenticate(username=username, password=password)
+        if not self.user:
+            raise forms.ValidationError(u'Wrong username/password', code='wrong_credentials')
+    class Meta:
+        model = User
+        fields = ('username', 'password')
 
 class SignUpForm(forms.Form):
     username = forms.CharField()
