@@ -55,12 +55,15 @@ class AnswerForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea)
     question = forms.IntegerField()
     def clean(self):
+        if not self._user.is_authenticated:
+            raise forms.ValidationError(u'Please login', code='login_required')
         if not 'question' in self.cleaned_data or \
             not models.Question.objects.get(pk=self.cleaned_data['question']):
             raise forms.ValidationError(u'Wrong wuestion ID', code='wrong_id')
     def save(self):
         self.cleaned_data['question'] = \
             models.Question.objects.get(pk=self.cleaned_data['question'])
+        self.cleaned_data['author'] = self._user
         answer = models.Answer(**self.cleaned_data)
         answer.save()
         return answer

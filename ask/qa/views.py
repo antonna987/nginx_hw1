@@ -44,11 +44,13 @@ def question(request, *args, **kwargs):
 
     if request.method == 'POST':
         form = forms.AnswerForm(request.POST)
+        form._user = request.user
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(q.get_absolute_url())
     else:
         form = forms.AnswerForm(initial={'question': idx})
+        form._user = request.user
 
     return render(request, 'blog/question.html', {
         'question': q,

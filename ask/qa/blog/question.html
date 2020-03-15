@@ -27,6 +27,9 @@
     ></script>
   </head>
   <body>
+    {% for e in form.non_field_errors %}
+        <div class="alert alert-danger">{{ e }}</div>
+    {% endfor %}
 
     <h5>{{ question.title }}</h5>
     <div>
