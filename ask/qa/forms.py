@@ -43,8 +43,10 @@ class AskForm(forms.Form):
     title = forms.CharField(max_length=255)
     text = forms.CharField(widget=forms.Textarea)
     def clean(self):
-        pass
+        if not self._user.is_authenticated:
+            raise forms.ValidationError(u'Please login', code='login_required')
     def save(self):
+        self.cleaned_data['author'] = self._user
         question = models.Question(**self.cleaned_data)
         question.save()
         return question

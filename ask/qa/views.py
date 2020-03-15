@@ -59,11 +59,13 @@ def question(request, *args, **kwargs):
 def ask(request, *args, **kwargs):
     if request.method == 'POST':
         form = forms.AskForm(request.POST)
+        form._user = request.user
         if form.is_valid():
             question = form.save()
             return HttpResponseRedirect(question.get_absolute_url())
     else:
         form = forms.AskForm()
+        form._user = request.user
     return render(request, 'blog/post_add.html', {
         'form': form
     })
