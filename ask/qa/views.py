@@ -76,11 +76,16 @@ def popular(request, *args, **kwargs):
         paginator = Paginator(posts, limit)
         paginator.baseurl = '/popular/?page='
         page = paginator.page(page)
+        if request.user.is_authenticated:
+            username = request.user.username
+        else:
+            username = 'Anonymous'
     except:
         raise Http404
     return render(request, 'blog/posts_popular.html', {
         'paginator': paginator,
         'page': page,
+        'username': username,
     })
 
 def new(request, *args, **kwargs):
