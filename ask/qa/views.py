@@ -1,3 +1,4 @@
+import django.contrib.auth as auth
 from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
@@ -8,7 +9,20 @@ def login(request, *args, **kwargs):
     return HttpResponse('login OK')
 
 def signup(request, *args, **kwargs):
-    return HttpResponse('signup OK')
+    if request.method == 'POST':
+        form = forms.SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = auth.authenticate(username=username, password=password)
+            auth.login(request, user)
+            return HttpResponseRedirect('/')
+    else:
+        form = forms.SignUpForm()
+    return render(request, 'blog/signup.html', {
+        'form': form
+    })
 
 def question(request, *args, **kwargs):
     idx = int(kwargs['idx'])

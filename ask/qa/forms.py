@@ -1,5 +1,29 @@
 from django import forms
 import qa.models as models
+from django.contrib.auth.models import User
+
+class SignUpForm(forms.Form):
+    username = forms.CharField()
+    email = forms.EmailField()
+    password = forms.CharField()
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username):
+            raise forms.ValidationError(u'Already existed', code='wrong_username')
+        return username
+    def clean(self):
+        pass
+    def save(self):
+        username = self.cleaned_data['username']
+        email = self.cleaned_data['email']
+        password = self.cleaned_data['password']
+        user = User.objects.create_user(
+            username, email=email, password=password)
+        user.save()
+        return user
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
 
 class AskForm(forms.Form):
     title = forms.CharField(max_length=255)
